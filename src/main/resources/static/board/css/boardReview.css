@@ -223,7 +223,7 @@
 }
 /* 리뷰내용 말줄임표 css */
 .review-text-content dd p {
-    line-height: 1.3;
+    line-height: 1.5;
     box-sizing: border-box;
     padding: 5px;
     height: 40px;

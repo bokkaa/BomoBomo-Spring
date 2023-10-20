@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/common/css/common.css"/>
   <link rel="stylesheet" href="/fragments/css/footer.css"/>
   <link rel="stylesheet" href="/fragments/css/header.css"/>
+  <link rel="stylesheet" href="/fragments/css/mypagesideMenu.css"/>
 
   <script src="/common/js/index.js" defer></script>
   <script src="/common/js/common.js" defer></script>
@@ -19,30 +20,19 @@
 
 <div class="container">
   <div class="section">
-    <aside class="menu-bar">
-      <!-- <a href="/Mypage/html/mypage_main.html" class="logo-img">
-          <img src="/Mypage/img/logo.png">
-      </a> -->
-      <div class="announcement">
-        <!--클릭시  페이지 이동-->
-        <a href="/board/notice">공지사항</a>
-      </div>
-      <div class="faq">
-        <a href="/board/faq">FAQ</a>
-      </div>
-      <div class="pay">
-        <a href="/mypage/buy">결제내역</a>
-      </div>
-      <div class="account-mg">
-        <a href="/mypage/userManage">계정관리</a>
-      </div>
+    <aside class="menu-bar" th:replace="fragments/mypagesideMenu.html :: menu-bar">
     </aside>
-      <div class="review-container" th:each="event : ${eventReview}" >
+    <div class="page-view">
+      <div class="page-title">
+        <p>
+          <a href="/mypage/main">리뷰 작성</a>
+        </p>
+      </div>
+      <div class="review-container" th:each="event : ${eventReview}">
         <form class="new-post-form" action="/board/modifyER" method="post" enctype="multipart/form-data" >
           <div class="form-group">
             <label for="post-title"  class="title">제목
             </label>
-
             <input type="text" id="post-title" th:value="${event.eventName}" required />
             <input type="hidden" name="eventNumber" th:value="${event.eventNumber}">
             <input type="hidden" name="userNumber" th:value="${event.userNumber}">
