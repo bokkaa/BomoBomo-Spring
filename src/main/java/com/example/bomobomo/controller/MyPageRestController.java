@@ -25,7 +25,7 @@ public class MyPageRestController {
     private final SitterBoardService sitterBoardService;
     private final EventBoardService eventBoardService;
 //     파일경로 확인 , 시터 결제내역 이미지
-    @Value("${file.sitterBuyImg}")
+    @Value("${file.empImg}")
     private String fileSitterBuyImg;
 
     @GetMapping("/img")
@@ -51,7 +51,7 @@ public class MyPageRestController {
     }
 
     //마이페이지 메인헤서 활동 이미지 출력
-    @Value("${file.empactImg}")
+    @Value("${actImg.dir}")
     private String fileEmpActImg;
 
     @GetMapping("/empActimg")

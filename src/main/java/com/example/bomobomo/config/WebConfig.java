@@ -11,6 +11,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${file.eventImg}")
     private String eventReviewImg;
 
+    @Value("${file.eventDetail}")
+    private String eventDetailImg;
+
     @Value("${file.empImg}")
     private String empPics;
 
@@ -23,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
         //리소스는 자원(이미지)
         registry.addResourceHandler("/upload/**")
                 .addResourceLocations("file:" + eventReviewImg)
+                .addResourceLocations("file:" + eventDetailImg)
                 .addResourceLocations("file:" + empPics)
                 .addResourceLocations("file:"+ eventReview);
         //로컬 디스크 경로는 file: 을 반드시 사용해야한다.
