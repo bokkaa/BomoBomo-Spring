@@ -1,36 +1,24 @@
-a {
-    text-decoration: none;
-}
 
-li {
-    margin: 15px auto;
-    list-style-type: none;
-    float: left;
-}
+/*.ul {*/
+/*    position: absolute;*/
+/*    margin-left: -10px;*/
+/*    justify-content: center;*/
 
-.ul {
-    position: absolute;
-    margin-left: -10px;
-    justify-content: center;
-
-}
+/*}*/
 
 .main{
     background-color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
+    min-width: 1024px;
+    min-height: 900px;
+
 }
 
-.header, .footer {
-    background-color: #fff;
-    padding: 20px 0;
-}
-
-.admin-container{
-    display: flex;
-    margin :auto ;
-    width: 1200px;
-    height:1000px;
+.loginContainer {
+    width: 1024px;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
 }
 
 .loginArea {
@@ -41,7 +29,7 @@ li {
 }
 
 .loginGreeting {
-    padding-top: 100px;
+    padding-top: 180px;
     font-size: 32px;
     color: #000;
     font-weight: 500;
@@ -49,45 +37,84 @@ li {
     text-align: center;
 }
 
+.login-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-set {
+
+    display: flex;
+    justify-content: center;
+}
+
+.logo-set ul {
+    width: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-img {
+    width: 70px;
+}
+
+.logo-img img {
+    width: 100%;
+    height: 100%;
+}
+
 .conpanyName {
-    color: #FF7000;
+    font-family: 'KIMM_Bold';
+    font-size: 22px;
+    letter-spacing: -2px;
+
+
+
+}
+
+.welcome-logo {
+    padding-left: 13px;
+    font-family: 'KIMM_Bold';
+    font-size: 14px;
+    color: rgba(128, 128, 128, 0.93);
+
 }
 
 .inputGroup{
     width: 350px;
-    height: 100px;   
+    height: 100px;
     display: table;
-    border-collapse: collapse;  
-}
-.inputText{
-    width:360px;
+    border-collapse: collapse;
 }
 
 .inputText input{
-    width : 330px;
-    height: 30px;
-    margin-bottom: 10px;
+    box-sizing: border-box;
+    width: 350px;
+    height: 40px;
+    margin-bottom: 25px;
 }
 
 .buttonLogin button{
-    width : 355px;
-    height: 40px;
-    margin-top: 30px;  
+    font-family: 'KIMM_Bold';
+    width: 350px;
+    height: 31px;
+    margin-top: 23px;
     cursor: pointer;
     color: white;
     background-color: #FF7000;
     border: 0px solid black;
     border-radius: 5px;
     font-weight: 500;
-    font-size: 20px;
-
-
+    font-size: 16px;
 }
 
 .userInfo {
     width: 350px;
     border-radius: 4px;
-    border: 1px solid #bbb;
+    border: 1px solid #75716e7a;
     text-indent: 25px;
     padding: 10px 12px;
     font-size: 14px;
@@ -95,14 +122,14 @@ li {
 
 .userInfoText {
     position: relative;
-    width: 300px;
-  }
+    width: 350px;
+}
 
 .userInfoText img {
     position : absolute;
-    width: 20px; 
+    width: 20px;
     /* width: 50px; */
-    top: 15px;
+    top: 9px;
     left: 12px;
     margin: 0;
 }
@@ -111,22 +138,38 @@ li {
     justify-content: center;
 }
 .userInfoObt a {
-    font-size: medium;
-    color: #FF7000;
+    font-size: 12px;
+    color: black;
 }
 .userInfoObt a:hover {
-    font-size: medium;
     color: orange;
 }
-.labelId, .labelPw {
-    display: none;
-}
-.labelFailed{
-    width: 320px;
-    color:red;
-    display: block;
+
+.userInfoObt li {
+    margin: 15px auto;
+    list-style-type: none;
+    float: left;
+    font-family: 'KIMM_Bold';
+    font-size: 13px;
 }
 
+
+.labelId, .labelPw {
+    display: none;
+    color: red;
+    position: absolute;
+    top: 45px;
+    font-size: 13px;
+    font-family: 'KIMM_Bold';
+}
+
+.idCheck {
+    position: absolute;
+    color: red;
+    font-size: 13px;
+    font-family: 'KIMM_Bold';
+
+}
 
 
 
