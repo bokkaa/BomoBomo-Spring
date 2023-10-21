@@ -84,7 +84,7 @@
                          where e.EMP_NUMBER = #{empNumber}
                          order by SITTER_BOARD_COUNT desc
                      )
-            )where rnum between 1 and 6
+            )where rnum between 1 and 5
 
     </select>
 
@@ -253,7 +253,7 @@
 
                       )
              )
-        where rnum between 1 and 6
+        where rnum between 1 and 5
 
     </select>
 

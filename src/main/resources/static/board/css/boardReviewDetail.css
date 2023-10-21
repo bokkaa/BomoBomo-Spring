@@ -1,7 +1,7 @@
 .review-detail-container {
     font-family: 'IBM Plex Sans KR', sans-serif;
 
-    padding-top: 50px;
+    padding-top: 130px;
     width: 1024px;
     margin: 0 auto;
 
@@ -15,8 +15,8 @@
 }
 
 .review-detail-sitter-pic {
-    width: 600px;
-    height: 350px ;
+    width: 400px;
+    height: 240px;
 }
 .review-detail-sitter-pic img {
     width: 100%;
@@ -61,23 +61,24 @@
 
 .related-sitter-review ul li:nth-child(1){
     font-size: 14px;
-    width: 110px;
+    width: 70px;
 }
 
 .related-sitter-review ul li:nth-child(2){
-    font-size: 13.5px;
+    font-size: 10.5px;
     overflow: hidden;
     padding-left: 10px;
-    width: 350px;
+    width: 470px;
     text-overflow: ellipsis;
     white-space: normal;
     text-align: left;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     display: -webkit-box;
-    line-height: 1.7;
+    line-height: 2.1;
 }
 .related-sitter-review ul li:nth-child(3){
+    text-align: end;
     font-size: 13.5px;
     width: 30px;
 }
@@ -102,7 +103,7 @@
 .review-detail-sitter-info ul {
     padding-left: 10px;
     padding-right: 10px;
-    width: 424px;
+    width: 600px;
     display: flex;
 }
 .review-detail-sitter-info ul li {

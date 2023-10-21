@@ -39,6 +39,8 @@ public class UserService {
         return userMapper.nameCheck(userName);
     }
 
+
+
     public int emailCheck(String userEmail, String userName) {
         return userMapper.emailCheck(userEmail, userName);
     }

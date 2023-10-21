@@ -96,6 +96,8 @@ function checkId(){
 
 };
 
+
+
 function checkPw() {
 
     let pw = $("#userPassword").val();
@@ -103,7 +105,7 @@ function checkPw() {
 
     let pwCheck = reg.test(pw);
 
-    $('#userPassword').on('keypress', function () {
+    $('#userPassword').on('keyup', function () {
 
         if(pwCheck) {
             $('.labelPwNo').css("display", "none");

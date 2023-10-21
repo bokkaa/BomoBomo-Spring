@@ -6,47 +6,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/admin/css/adminLogin.css" />
+    <link rel="stylesheet" href="/common/css/common.css"/>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <title>BOMOBOMO</title>
+    <title>BomoBomo 관리자</title>
 </head>
 <body>
-    <div>
-        <div class="main">
-            <main>
-                <div class="admin-container">
-                    <div class="loginArea">
-                        <div class="loginGreeting">
-                            <h3 class="conpanyName"><label>관리자 로그인</label></h3>
-                        </div>
-                        <div>
-                            <form action="/admin/login" method="post">
-                            <div class="inputGroup">
-                                <div class="inputText">
-                                        <div class="userInfoText">
-                                            <img src="/admin/img/userId.png">
-                                            <input class="userInfo" type="text" id="adminId" name="adminId" placeholder="아이디">
-                                            <label class="labelId">아이디를 입력해주세요</label>
-                                        </div>
-                                        <div class="userInfoText">
-                                            <img src="/admin/img/userPw.png">
-                                            <input class="userInfo" type="password" id="adminPassword" name="adminPassword"placeholder="비밀번호">
-                                            <label class="labelPw">비밀번호를 입력해주세요</label>
-                                            <label class="labelFailed" th:if="${isLogin == '0'}">아이디 또는 비밀번호를 잘못 입력했습니다.</label>
-                                        </div>
+<div class="main" style="height: 600px;">
+    <main>
+        <div class="loginContainer">
+            <div class="loginArea">
+                <!-- 로그인 라벨 -->
+                <div class="loginGreeting">
+                    <ul class="login-title">
+                        <li>
+                            <div class="logo-set">
+                                <ul>
+                                    <li class="logo-img"><img src="/common/img/logo.png" alt="로고"/></li>
+                                    <li><h3 class="conpanyName"><label class="test">BomoBomo</label></h3></li>
+                                </ul>
+                            </div>
+                        <li class="welcome-logo">관리자 로그인</li>
+                    </ul>
+                </div>
 
+                <div>
+                    <form action="/admin/login" method="post">
+                        <div class="inputGroup">
+                            <div class="inputText">
+                                <div class="userInfoText">
+                                    <img src="/user/img/userId.png">
+                                    <input class="userInfo" type="text" id="adminId" name="adminId" placeholder="아이디">                                    <label class="labelId">아이디를 입력해주세요.</label>
+                                </div>
+                                <div class="userInfoText">
+                                    <img src="/user/img/userPw.png">
+                                    <input class="userInfo" type="password" id="adminPassword" name="adminPassword" placeholder="비밀번호">                                    <label class="labelPw">패스워드를 입력해주세요.</label>
                                 </div>
                             </div>
-                            <div class="buttonLogin">
-                                <button class="loginBtn">로그인</button>
-                            </div>
-                            </form>
+                            <span class="idCheck" th:if="${isLogin == '0'}">아이디 또는 비밀번호를 다시 확인해주세요.</span>
+
                         </div>
-                    </div>
+                        <div class="buttonLogin">
+                            <button class="loginBtn">로그인</button>
+                        </div>
+                    </form>
                 </div>
-            </main>
+            </div>
+
         </div>
-    </div>
+    </main>
+</div>
+
+
+
     <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
     <script src="/admin/js/adminLogin.js"></script>
 </body>

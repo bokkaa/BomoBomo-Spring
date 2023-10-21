@@ -1,4 +1,4 @@
-$(".buttonLogin").click(function() {
+$(".loginBtn").click(function() {
 
     let id = $("#adminId").val();
     let pw = $("#adminPassword").val();
