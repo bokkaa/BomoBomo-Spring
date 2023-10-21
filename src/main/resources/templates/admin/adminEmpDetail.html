@@ -33,6 +33,17 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>평점</th>
+                            <td>
+                                <span th:if="${avg <0.5}" class="avg">☆☆☆☆☆</span>
+                                <span th:if="${avg >=0.5 && avg <1.5}" class="avg" >★☆☆☆☆ </span>
+                                <span th:if="${avg >=1.5 && avg <2.5}" class="avg">★★☆☆☆ </span>
+                                <span th:if="${avg >=2.5 && avg <3.5}" class="avg">★★★☆☆ </span>
+                                <span th:if="${avg >=3.5 && getAvg <4.5}" class="avg">★★★★☆ </span>
+                                <span th:if="${avg >=4.5 }" class="avg">★★★★★ </span>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>나이</th>
                             <td>
                                 <input type="text" class="text-input" placeholder="나이를 입력하세요" id="age" th:value="${empDetail.empAge}" name="empAge" readonly>

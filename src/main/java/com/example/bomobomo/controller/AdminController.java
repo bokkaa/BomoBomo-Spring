@@ -144,10 +144,10 @@ public class AdminController {
     public void selectEmpDetail(@RequestParam(name="empNumber")Long empNumber,
                                 Model model){
         EmpVo empDetail= adminService.selectEmpDetail(empNumber);
-        log.info("=======================지역 = {},{}",empDetail.getCityName(),empDetail.getCountryName());
-//        RegionVo region = adminService.selectEmpRegion(empNumber);
+        double avg = adminService.selectEmpAvg(empNumber);
+
         model.addAttribute("empDetail",empDetail);
-//        model.addAttribute("region", region);
+        model.addAttribute("avg",avg);
     }
     @GetMapping("/admin/adminEmpConfig")
     public void empUpdate(@RequestParam(name="empNumber")Long empNumber, Model model){
@@ -198,7 +198,11 @@ public class AdminController {
     @GetMapping(value={"/adminEventDetail","/adminEventConfig"})
     public void selectEventDetail(@RequestParam(name="eventNumber")Long eventNumber,Model model){
         EventVo eventDetail = adminService.selectEventDetail(eventNumber);
+        log.info("=======================================바보");
+        double avg = adminService.selectEventAvg(eventNumber);
+        log.info("=================================바보{}",avg);
         model.addAttribute("eventDetail",eventDetail);
+        model.addAttribute("avg",avg);
     }
 
     @GetMapping("/eventRegist")

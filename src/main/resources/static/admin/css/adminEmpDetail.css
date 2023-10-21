@@ -1,6 +1,13 @@
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 *{
     margin: 0px;
     padding: 0px;
+    font-family: 'S-CoreDream-3Light';
 }
 a{
     text-decoration: none;
@@ -392,4 +399,8 @@ th{
     width:140px;
     background-color:#4F4D8E;
     color: white;
+}
+.avg{
+    color: #e89f14d9;
+    font-size: 16px;
 }

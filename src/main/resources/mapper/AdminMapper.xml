@@ -402,16 +402,17 @@
         values (SEQ_EVENT_DETAIL.NEXTVAL,#{eventNumber},#{eventDetailName},#{eventDetailUploadPath},#{eventDetailUuid})
     </insert>
 <!-- 이벤트 리스트 조회-->
-    <select id="selectAllEvents" resultType="eventVo">
-        select rnum, event_number, event_name, event_price,
+    <select id="selectAllEvents" resultType="adminEventVo">
+        select rnum, event_number, event_name, event_price,avg,
                event_img_name, event_img_upload_path, event_img_uuid,
                event_detail_name, event_detail_upload_path, event_detail_uuid
         from(
-                select ROWNUM AS RNUM, event_number, event_name, event_price,
+                select ROWNUM AS RNUM, event_number, event_name, event_price,avg,
                        event_img_name, event_img_upload_path, event_img_uuid,
                        event_detail_name, event_detail_upload_path, event_detail_uuid
                 from (
                          select e.event_number, e.event_name, e.event_price,
+                                (SELECT AVG(rating) FROM EVENT_BOARD eb WHERE eb.EVENT_NUMBER = e.event_number) AS avg,
                                 ei.EVENT_IMG_NAME, ei.EVENT_IMG_UPLOAD_PATH,ei.EVENT_IMG_UUID,
                                 ED.EVENT_DETAIL_NAME, ED.EVENT_DETAIL_UPLOAD_PATH, ED.EVENT_DETAIL_UUID
                          from event e
@@ -522,4 +523,16 @@
         delete from est_content
         where match_number = #{matchNumber}
     </delete>
+<!-- 직원 평점 조회-->
+    <select id="selectEmpAvg" resultType="double">
+        select avg(RATING) as avg
+        from SITTER_BOARD
+        where emp_number = #{empNumber}
+    </select>
+<!-- 이벤트 평점 조회-->
+    <select id="selectEventAvg" resultType="double">
+        select avg(rating) as avg
+        from event_board
+        where event_number = #{eventNumber}
+    </select>
 </mapper>

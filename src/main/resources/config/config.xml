@@ -47,6 +47,7 @@
         <typeAlias type="com.example.bomobomo.domain.dto.EventBoardDto" alias="eventBoardDto"/>
         <typeAlias type="com.example.bomobomo.domain.dto.EventCommentDto" alias="eventCommentDto"/>
         <typeAlias type="com.example.bomobomo.domain.vo.EventPayVo" alias="eventPayVo"/>
+        <typeAlias type="com.example.bomobomo.domain.vo.AdminEventVo" alias="adminEventVo"/>
         <!--======================== 이벤트 게시판 작성 파일 ========================-->
         <typeAlias type="com.example.bomobomo.domain.dto.EventBoardImgDto" alias="eventBoardImgDto"/>
         <!--======================== Vo ========================-->

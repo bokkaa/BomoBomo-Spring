@@ -67,6 +67,16 @@ public class AdminService {
     public List<EmpDto> selectAllEmp(Criteria criteria, SearchVo searchVo){
         return adminMapper.selectAllEmp(criteria,searchVo);
     }
+// 직원 평점
+    public double selectEmpAvg(Long empNumber){
+        double avg = 0;
+        try {
+            avg = adminMapper.selectEmpAvg(empNumber);
+        } catch (Exception e) {
+            avg=0;
+        }
+        return avg;
+    }
 // 직원 수
     public int getTotalEmp(SearchVo searchVo){
         return adminMapper.getTotalEmp(searchVo);
@@ -154,7 +164,6 @@ public class AdminService {
 
 //    직원 상세
     public EmpVo selectEmpDetail(Long empNumber){
-
         return adminMapper.selectEmpDetail(empNumber);
     }
 //    직원 활동 조회
@@ -221,7 +230,7 @@ public class AdminService {
         adminMapper.eventDelete(eventNumber);
     }
 //    이벤트 리스트
-    public List<EventVo> selectAllEvents(Criteria criteria, SearchVo searchVo){
+    public List<AdminEventVo> selectAllEvents(Criteria criteria, SearchVo searchVo){
         return adminMapper.selectAllEvents(criteria,searchVo);
     }
 //   이벤트 리스트 수
@@ -248,7 +257,16 @@ public class AdminService {
     public void eventImgRegist(EventImgDto eventImgDto){
         adminMapper.eventImgRegist(eventImgDto);
     }
-
+//    이벤트 평균별점 조회
+    public double selectEventAvg(Long eventNumber){
+        double avg = 0;
+        try {
+            avg = adminMapper.selectEventAvg(eventNumber);
+        } catch (Exception e) {
+            avg=0;
+        }
+        return avg;
+    }
 //    이벤트 이미지 저장처리
 public EventImgDto saveEventImg(MultipartFile evenImg) throws IOException {
 //        사용자가 올린 파일 이름(확장자를 포함)

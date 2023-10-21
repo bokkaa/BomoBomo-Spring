@@ -1,8 +1,30 @@
+<<<<<<< HEAD
 
 /*.ul {*/
 /*    position: absolute;*/
 /*    margin-left: -10px;*/
 /*    justify-content: center;*/
+=======
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: 'S-CoreDream-3Light';
+}
+a {
+    text-decoration: none;
+}
+li {
+    margin: 15px auto;
+    list-style-type: none;
+    float: left;
+}
+>>>>>>> 4e561a4aba7ae86a60b4033563fe280c3b1dc4fc
 
 /*}*/
 

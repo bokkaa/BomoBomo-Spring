@@ -122,7 +122,7 @@ public class AdminRestController {
         criteria.setPage(page);
         criteria.setAmount(9);
         PageVo pageVo = new PageVo(adminService.getTotalEvents(searchVo), criteria);
-        List<EventVo> eventList = adminService.selectAllEvents(criteria,searchVo);
+        List<AdminEventVo> eventList = adminService.selectAllEvents(criteria,searchVo);
 
         Map<String,Object> eventListMap = new HashMap<>();
         eventListMap.put("pageVo",pageVo);

@@ -1,6 +1,13 @@
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 *{
     margin: 0px;
     padding: 0px;
+    font-family: 'S-CoreDream-3Light';
 }
 a{
     text-decoration: none;
@@ -149,12 +156,10 @@ ul{
     cursor: pointer;
 }
 .event-item{
-    /* border-radius: 5%; */
-    /* border: 3px solid #01b9ff; */
     width: 320px;
     height: 250px;
     margin-bottom: 10px;
-    /*border: 1px solid #ebebeb;*/
+    box-shadow: 1px 1px 1px 1px rgba(163,174,184,0.7);
 }
 .event-img{
     /*border-radius: 2%;*/
@@ -175,19 +180,19 @@ ul{
     padding: 5px;
 }
 .event-title{
-    font-size: 16px;
+    font-size: 14px;
     /* font-weight: bold; */
     margin-top: 5px;
     text-align: left;
 }
 .event-price{
-    font-size: 20px;
+    font-size: 15px;
 }
 .won{
     font-size: 12px;
 }
 .event-rating{
-
+    color: #e89f14d9;
 }
 .event-list-bottom{
     margin: 10px auto 0;

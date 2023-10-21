@@ -5,6 +5,7 @@ import com.example.bomobomo.domain.vo.*;
 import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
 import java.util.List;
 
@@ -51,6 +52,8 @@ public interface AdminMapper {
     public List<EmpActItemDto> selectEmpActItem(Long empNumber);
 //    직원 삭제
     public void empDelete(Long empNumber);
+//    직원 평점
+    public double selectEmpAvg(Long empNumber);
 
 //    공지사항 리스트
     public List<NoticeDto> selectAllNotice(@Param("criteria")Criteria criteria, @Param("searchVo")SearchVo searchVo);
@@ -75,7 +78,7 @@ public interface AdminMapper {
     public void updateStatus(@Param("matchNumber")Long matchNumber,@Param("status")String status);
 
 //    이벤트 리스트
-    public List<EventVo> selectAllEvents(@Param("criteria")Criteria criteria, @Param("searchVo")SearchVo searchVo);
+    public List<AdminEventVo> selectAllEvents(@Param("criteria")Criteria criteria, @Param("searchVo")SearchVo searchVo);
 //    검색별 이벤트수
     public int getTotalEvents(SearchVo searchVo);
 //    이벤트 조회
@@ -94,6 +97,8 @@ public interface AdminMapper {
     public void updateEventImg(EventImgDto eventImgDto);
 //    이벤트 상세정보 업데이트
     public void updateEventDetail(EventDetailDto eventDetailDto);
+//    이벤트 평균 별점 조회
+    public double selectEventAvg(Long eventNumber);
 
 //    city 전체조회
     public List<CityDto> selectAllCity();

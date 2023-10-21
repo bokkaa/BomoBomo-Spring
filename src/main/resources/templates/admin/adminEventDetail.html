@@ -35,6 +35,17 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th>평점</th>
+                                <td>
+                                    <span th:if="${avg <0.5}" class="avg">☆☆☆☆☆</span>
+                                    <span th:if="${avg >=0.5 && avg <1.5}" class="avg" >★☆☆☆☆ </span>
+                                    <span th:if="${avg >=1.5 && avg <2.5}" class="avg">★★☆☆☆ </span>
+                                    <span th:if="${avg >=2.5 && avg <3.5}" class="avg">★★★☆☆ </span>
+                                    <span th:if="${avg >=3.5 && getAvg <4.5}" class="avg">★★★★☆ </span>
+                                    <span th:if="${avg >=4.5 }" class="avg">★★★★★ </span>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th >비용</th>
                                 <td>
                                     <input type="text" class="text-input" th:value="${eventDetail.eventPrice}"  name="eventPrice" readonly>

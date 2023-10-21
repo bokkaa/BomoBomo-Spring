@@ -55,6 +55,25 @@ function loadEventList(result){
         let list = $('.event-list');
         list.empty();
         $.each(result.eventList, function (index, event) {
+            let avg = "";
+            if(event.avg<0.5){
+                avg="☆☆☆☆☆";
+            }else if(event.avg>=0.5 && event.avg < 1.5){
+                avg="★☆☆☆☆";
+            }
+            else if(event.avg>=1.5 && event.avg < 2.5){
+                avg="★★☆☆☆";
+            }
+            else if(event.avg>=2.5 && event.avg < 3.5){
+                avg="★★★☆☆";
+            }
+            else if(event.avg>=3.5 && event.avg < 4.5){
+                avg="★★★★☆";
+            }
+            else if(event.avg>=4.5){
+                avg="★★★★★";
+            }
+
             let eventDiv = $('<div class="event-item">');
             let imagePath =event.eventImgUploadPath + '/th_' + event.eventImgUuid + '_' + event.eventImgName;
             eventDiv.append('<div class="event-img">'+
@@ -62,7 +81,7 @@ function loadEventList(result){
                 '</div>');
             eventDiv.append('<div class ="event-title">' + event.eventName+'</div>');
             eventDiv.append('<span class="event-price">'+ event.eventPrice+'<span class="won">원</span></span>');
-            eventDiv.append('<div class="event-rating">★4.5/5</div>');
+            eventDiv.append('<div class="event-rating">'+avg+ '</div>');
             eventDiv.on('click', function(){
                let url = `/admin/adminEventDetail?eventNumber=${event.eventNumber}`
                 window.location.href=url;
