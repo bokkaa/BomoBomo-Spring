@@ -23,6 +23,8 @@ public interface UserMapper {
     public int idCheck(String userId);
     //등록된 이름인지 확인
     public int nameCheck(String userName);
+
+
     //등록된 이름,이메일인지인지 확인
     public int emailCheck(@Param("userEmail")String userEmail, @Param("userName")String userName);
     //등록된 아이디, 이름, 이메일인지인지 확인

@@ -57,6 +57,9 @@
         WHERE USER_ID = #{userId}
     </select>
 
+
+
+
     <select id="nameCheck" resultType="_int">
         SELECT COUNT (USER_NAME) FROM USERS
         WHERE USER_NAME = #{userName}
