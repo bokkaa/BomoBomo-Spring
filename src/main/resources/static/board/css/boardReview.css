@@ -153,6 +153,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-row-gap: 30px;
+    grid-gap: 6px;
 
     /* border: 2px solid red; */
 }
@@ -161,7 +162,8 @@
 
     /* border: 2px solid red; */
     width: 250px;
-    border: 1px solid gray;
+    box-shadow: 1px 1px 1px 1px #c5c5c5;
+
 }
 .review-ul li a {
     color: black;

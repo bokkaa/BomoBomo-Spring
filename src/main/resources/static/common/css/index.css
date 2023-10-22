@@ -198,6 +198,7 @@
 .review-panel ul li, .review-panel2 ul li {
     width: 295px;
     height: 150px;
+    box-shadow: 1px 1px 1px 1px #c5c5c5;
 }
 
 .review-panel ul li img, .review-panel2 ul li img {
@@ -209,12 +210,10 @@
 }
 
 .review-panel dl, .review-panel2 dl {
-    border: 1px solid gray;
-
+    box-shadow: 1px 1px 1px 1px #c5c5c5;
 }
 
 .review-section {
-    border: 1px solid gray;
 }
 .review-rating {
     width: 75px;

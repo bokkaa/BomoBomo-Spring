@@ -41,6 +41,12 @@ $('.notice-search-btn').on('click', function (){
     boardNotify.loadPage(1, getSearchVo(), noticeList);
 })
 
+$(document).on('click', '.back-to-notice-btn', function (){
+    $('.keyword').val('');
+    keywordTest = '';
+    boardNotify.loadPage(1, getSearchVo(), noticeList);
+})
+
 
 function noticeList(result) {
     let text = '';

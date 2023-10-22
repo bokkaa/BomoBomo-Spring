@@ -142,8 +142,12 @@
 }
 .back-to-notice-btn {
 
+    border: none;
     padding: 3px;
+    cursor: pointer;
+    background-color: white;
     font-size: 14px;
+    font-family: GmarketSansMedium;
 }
 
 

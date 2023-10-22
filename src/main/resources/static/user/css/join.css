@@ -169,7 +169,6 @@ li {
     border-radius: 5px;
     border: 1px solid #75716e7a;
     /* border: 1px solid #bbb; */
-    text-indent: 25px;
     font-size: 14px;
 }
 
@@ -181,7 +180,7 @@ li {
     height: 40px;
     border-radius: 5px;
     border: 1px solid #75716e7a;
-    text-indent: 25px;
+    text-indent: 5px;
     font-size: 14px;
 }
 
