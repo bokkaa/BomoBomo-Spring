@@ -29,17 +29,27 @@
 [BOMOBOMO 포트폴리오.pdf](https://github.com/bokkaa/SpringBoot-BomoBomo/files/14415618/BOMOBOMO.pdf)
 
 ## 📌 내가 맡은 기능
-#### 메인 페이지 <a href="https://github.com/bokkaa/JPA-DW/wiki/%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80" >상세보기 - WIKI 이동</a>
+#### 메인 페이지 <a href="https://github.com/bokkaa/SpringBoot-BomoBomo/wiki/%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80" >상세보기 - WIKI 이동</a>
 - 베스트 돌봄 후기 Top6
 - 베스트 이벤트 후기 Top6
 
+#### FAQ / 공지사항 게시판 <a href="https://github.com/bokkaa/SpringBoot-BomoBomo/wiki/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD-%EA%B2%8C%EC%8B%9C%ED%8C%90" >상세보기 - WIKI 이동</a>
+- FAQ 목록
+- 공지사항 목록
+- 공지사항 상세보기
 
-#### 커뮤니티 <a href="https://github.com/bokkaa/JPA-DW/wiki/%EA%B3%84%EC%A0%95-%EA%B4%80%EB%A0%A8" >상세보기 - WIKI 이동</a>
-- FAQ 게시판
-- 공지사항 게시판
-- 후기 게시판
+#### 돌봄 후기 게시판 <a href="https://github.com/bokkaa/SpringBoot-BomoBomo/wiki/%EB%8F%8C%EB%B4%84-%ED%9B%84%EA%B8%B0-%EA%B2%8C%EC%8B%9C%ED%8C%90" >상세보기 - WIKI 이동</a>
+- 돌봄 후기 목록
+- 돌봄 후기 상세
+- 돌봄 후기 수정 삭제
+- 댓글 기능
 
-#### 에러 페이지 <a href="https://github.com/bokkaa/JPA-DW/wiki/%EC%82%B0%EC%B1%85%EB%A9%94%EC%9D%B4%ED%8A%B8-%EA%B2%8C%EC%8B%9C%ED%8C%90" >상세보기 - WIKI 이동</a>
+#### 이벤트 후기 게시판 <a href="https://github.com/bokkaa/SpringBoot-BomoBomo/wiki/%EC%9D%B4%EB%B2%A4%ED%8A%B8-%ED%9B%84%EA%B8%B0-%EA%B2%8C%EC%8B%9C%ED%8C%90" >상세보기 - WIKI 이동</a>
+- 이벤트 후기 목록
+- 이벤트 후기 상세
+- 이벤트 후기 수정 삭제
+- 댓글 기
+#### 에러 페이지 <a href="https://github.com/bokkaa/SpringBoot-BomoBomo/wiki/%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80" >상세보기 - WIKI 이동</a>
 - 에러 페이지
 
 
