@@ -28,6 +28,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/admin/login")
                 .excludePathPatterns("/admin/logout")
                 .excludePathPatterns("/admin/*")
-                .order(1);
+                .order(1) ;
     }
 }

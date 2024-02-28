@@ -34,7 +34,7 @@ $(document).ready(function() {
                 $arrow.css({'transform':'rotate(0deg)'});
             }
 
-            var $dd = $(this).next('dd');
+                var $dd = $(this).next('dd');
             $dd.stop().slideToggle(400);
 
             // 다른 항목의 화살표를 원래대로 돌려놓기

@@ -48,7 +48,14 @@ public class BoardController {
     }
 
 
-    //공지사항 상세보기
+    /**
+     * 공지사항 상세
+     * @param noticeNumber 공지사항 ID
+     * @param model model 객체
+     * @param req HttpServletRequest 객체
+     * @param resp HttpServletResponse 객체
+     * @return 해당 공지사항 ID와 일치하는 게시물 정보
+     */
     @GetMapping("/detail")
     public String showNoticeDetailPage(@RequestParam(name = "noticeNumber") Long noticeNumber, Model model, HttpServletRequest req, HttpServletResponse resp){
 
@@ -56,70 +63,32 @@ public class BoardController {
         //모델 객체를 통해 detail페이지로 해당 공지사항 세부내역 전달
         model.addAttribute("noticeDetail",  noticeService.selectOne(noticeNumber));
 
-        //쿠키를 활용
-        Cookie[] cookies = req.getCookies();
-        boolean updateCount = true;
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("notice_count_cookie".equals(cookie.getName())) {
-                    // 해당 쿠키가 이미 존재하는 경우
-
-                    String cookieValue = cookie.getValue();
-
-                    //쿠키밸루를 가져와서 _마다 쪼개어 배열로 저장한다.
-                    String[] values = cookieValue.split("_");
-                    String boardNoticeNumber = values[0];
-
-                    log.info(cookieValue+"=====================================================");
-                    log.info(values[0]+"=====================================================");
-                    log.info(values[1]+"=====================================================");
-
-                    long storedTimestamp = Long.parseLong(values[1]); //쿠키를 생성했을 때 발급해준 발급시간을 저장
-                    long currentTimestamp = new Date().getTime(); // 현재 시간을 저장
-
-                    // 현재 날짜와 저장된 날짜를 비교하여 하루에 한 번만 업데이트
-                    if (boardNoticeNumber.equals(req.getParameter("noticeNumber")) && (currentTimestamp - storedTimestamp) < (24 * 60 * 60 * 1000)) {
-
-                        //조회수 증가x
-                        updateCount = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        //쿠키가 없다면(또는 이미 발급 받았던 notice_count_cookie의 지속시간이 지났을 경우)
-        // notice_count_cookie를 생성해주고 해당 게시물 들어갔을 때 조회수 증가
-        if (updateCount) {
-            Cookie newCookie = new Cookie("notice_count_cookie", req.getParameter("noticeNumber") + "_" + new Date().getTime());
-            newCookie.setMaxAge(24 * 60 * 60); // 쿠키 생성 시 24시간 유지
-            resp.addCookie(newCookie);
-
-            //조회수 증가
-            noticeService.updateCount(noticeNumber);
-        }
-
+        //조회수 증가
+        CookieHandler cookieHandler = new CookieHandler(noticeService, reviewService);
+        cookieHandler.handleCookies(req, resp, noticeNumber, "notice_count_cookie");
 
         return "board/detail";
     }
 
 
     //=========================================================
+
+
     //돌봄후기 게시판
-
-
     @GetMapping("/serviceReview")
     public String showServiceReviewPage(){
         return "board/serviceReview";
     }
 
-    
-    
-    //돌봄후기 등록 
-    
 
-    //돌봄후기 상세보기
+    /**
+     * 돌봄 서비스 후기 상세
+     * @param sitterBoardNumber 돌봄 후기 게시물ID
+     * @param model model 객체
+     * @param req HttpServletRequest 객체
+     * @param resp HttpServletResponse 객체
+     * @return 해당 Id와 일치하는 게시물 정보
+     */
     @GetMapping("/reviewDetail")
     public String showServiceReviewDetailPage(@RequestParam("sitterBoardNumber") Long sitterBoardNumber,
                                                Model model, HttpServletRequest req, HttpServletResponse resp){
@@ -130,48 +99,9 @@ public class BoardController {
         List<SitterBoardVo> sitterBoardVoList = reviewService.findReviewDetail(sitterBoardVo.getEmpNumber());
         double getAvg = reviewService.getAvgRating(sitterBoardVo.getEmpNumber());
 
-
-        Cookie[] cookies = req.getCookies();
-        boolean updateCount = true;
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("reviewDetail_count_cookie".equals(cookie.getName())) {
-                    String cookieValue = cookie.getValue();
-
-                    String[] values = cookieValue.split("/");
-                    log.info("%%%%%%%%%% {}", Arrays.toString(values));
-
-                    List<Long> valueList = Arrays.stream(values).mapToLong(Long::parseLong).boxed().collect(Collectors.toList());
-
-                    if(valueList.contains(sitterBoardNumber)){
-                        updateCount = false;
-                        break;
-                    }
-
-                    valueList.add(sitterBoardNumber);
-                    log.info("##############3 {}", valueList);
-
-                    String result = String.join("/", valueList.stream().map(ele -> ele+"").collect(Collectors.toList()));
-
-                    log.info("**************************** {}", result);
-                    cookie.setValue(result);
-                    resp.addCookie(cookie);
-                    updateCount = false;
-                    reviewService.updateCount(sitterBoardNumber);
-
-                }
-
-            }
-        }
-
-        if (updateCount) {
-            Cookie newCookie = new Cookie("reviewDetail_count_cookie", req.getParameter("sitterBoardNumber"));
-            newCookie.setMaxAge(24 * 60 * 60);
-            resp.addCookie(newCookie);
-
-            reviewService.updateCount(sitterBoardNumber);
-        }
+        //조회수 증가
+        CookieHandler cookieHandler = new CookieHandler(noticeService, reviewService);
+        cookieHandler.handleCookies(req, resp, sitterBoardNumber, "reviewDetail_count_cookie");
 
 
         model.addAttribute("sitterReviewList", sitterBoardVoList);
@@ -183,7 +113,13 @@ public class BoardController {
         log.info(sitterBoardVoList.toString());
         return "board/serviceReviewDetail";
     }
-    //돌봄 후기 수정창으로 이동
+
+    /**
+     * 돌봄 서비스 후기 수정 페이지 이동
+     * @param sitterBoardNumber 돌봄 후기 게시물 ID
+     * @param model model 객체
+     * @return
+     */
     @GetMapping("/modifyServiceReview")
     public String modifyServiceReview(@ModelAttribute("sitterBoardNumber") Long sitterBoardNumber,
                                       Model model){
@@ -193,7 +129,13 @@ public class BoardController {
         return "board/serviceReviewModify";
     }
 
-    //돌봄 후기 수정 완료
+    /**
+     * 돌봄 서비스 후기 수정 완료
+     * @param sitterBoardDto 수정 정보가 담긴 dto
+     * @param sitterBoardNumber 돌봄 후기 게시물ID
+     * @param redirectAttributes RedirectAttributes 객체
+     * @return
+     */
     @PostMapping("/modifySR")
     public RedirectView modifySR(SitterBoardDto sitterBoardDto,
                                  @RequestParam("sitterBoardNumber") Long sitterBoardNumber,
@@ -210,8 +152,11 @@ public class BoardController {
     }
 
 
-
-    //돌봄후기 삭제
+    /**
+     * 돌봄 서비스 후기 삭제
+     * @param sitterBoardNumber 돌봄 후기 게시물 ID
+     * @return 돌봄 후기 목록 페이지로 이동
+     */
     @GetMapping("/removeSReview")
     public RedirectView removeServiceReview(Long sitterBoardNumber){
         reviewService.delete(sitterBoardNumber);
@@ -221,6 +166,8 @@ public class BoardController {
 
     
     //=========================================================================
+
+
     //이벤트 게시판 이동
     @GetMapping("/eventReview")
     public String showEventReviewPage(){
@@ -228,10 +175,15 @@ public class BoardController {
     }
 
 
-    //이벤트 후기 등록
-    
-    
-    
+
+    /**
+     * 이벤트 서비스 후기 상세
+     * @param eventBoardNumber 이벤트 후기 게시물 ID
+     * @param model model 객체
+     * @param req HttpServletRequest 객체
+     * @param resp HttpServletResponse 객체
+     * @return 해당 ID와 일치하는 게시물 정보
+     */
     //이벤트 후기 상세보기
     @GetMapping("/reviewEventDetail")
     public String showEventReviewDetailPage(@RequestParam("eventBoardNumber")Long eventBoardNumber
@@ -250,53 +202,20 @@ public class BoardController {
         model.addAttribute("eventReviewDetail", eventBoardVo);
         model.addAttribute("avgEventReview", (Math.round(getAvgEventReview*100) / 100.0));
 
+        //조회수 증가
+        CookieHandler cookieHandler = new CookieHandler(noticeService, reviewService);
+        cookieHandler.handleCookies(req, resp, eventBoardNumber, "eventReviewDetail_count_cookie");
 
-
-        Cookie[] cookies = req.getCookies();
-        boolean updateCount = true;
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("eventReviewDetail_count_cookie".equals(cookie.getName())) {
-                    String cookieValue = cookie.getValue();
-
-                    String[] values = cookieValue.split("/");
-                    log.info("%%%%%%%%%% {}", Arrays.toString(values));
-
-                    List<Long> valueList = Arrays.stream(values).mapToLong(Long::parseLong).boxed().collect(Collectors.toList());
-
-                    if(valueList.contains(eventBoardNumber)){
-                        updateCount = false;
-                        break;
-                    }
-
-                    valueList.add(eventBoardNumber);
-                    log.info("##############3 {}", valueList);
-
-                    String result = String.join("/", valueList.stream().map(ele -> ele+"").collect(Collectors.toList()));
-
-                    log.info("**************************** {}", result);
-                    cookie.setValue(result);
-                    resp.addCookie(cookie);
-                    updateCount = false;
-                    reviewService.updateEventReviewCount(eventBoardNumber);
-
-                }
-
-            }
-        }
-
-        if (updateCount) {
-            Cookie newCookie = new Cookie("eventReviewDetail_count_cookie", req.getParameter("eventBoardNumber"));
-            newCookie.setMaxAge(24 * 60 * 60);
-            resp.addCookie(newCookie);
-
-            reviewService.updateEventReviewCount(eventBoardNumber);
-        }
         return "board/eventReviewDetail";
 
     }
-    //이벤트 후기 수정 페이지 이동
+
+    /**
+     * 이벤트 서비스 후기 수정 페이지 이동
+     * @param eventBoardNumber 이벤트 후기 게시물 ID
+     * @param model model 객체
+     * @return
+     */
     @GetMapping("/modifyEventReview")
     public String modifyEventReview(@ModelAttribute("eventBoardNumber") Long eventBoardNumber,
                                     Model model){
@@ -306,7 +225,16 @@ public class BoardController {
     }
 
 
-    //이벤트 후기 수정 등록
+    /**
+     * 이벤트 서비스 후기 수정 완료
+     * @param eventBoardNumber 이벤트 후기 게시물 ID
+     * @param userNumber 회원 ID
+     * @param eventNumber 이벤트 ID
+     * @param eventBoardDto 수정 정보가 담긴 dto
+     * @param redirectAttributes RedirectAttributes 객체
+     * @param files 사진파일
+     * @return
+     */
     @PostMapping("/modifyER")
     public RedirectView modifyER(@RequestParam("eventBoardNumber")Long eventBoardNumber,
                                  @RequestParam("userNumber")Long userNumber,
@@ -328,7 +256,11 @@ public class BoardController {
 
     }
 
-    //이벤트 후기 삭제
+    /**
+     * 이벤트 서비스 후기 삭제
+     * @param eventBoardNumber 이벤트 후기 게시물 ID
+     * @return 이벤트 후기 목록 페이지로 이동
+     */
     @GetMapping("/removeEReview")
     public RedirectView removeEventReview(Long eventBoardNumber){
         reviewService.removeEventReview(eventBoardNumber);

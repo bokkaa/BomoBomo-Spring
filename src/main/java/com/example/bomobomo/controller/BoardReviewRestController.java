@@ -30,6 +30,7 @@ public class BoardReviewRestController {
     @Value("${file.empImg}")
     String empImg;
 
+    //직원 사진 경로
     @GetMapping("/empPic")
     public byte[] getEmpPic(String empPicFullName) throws IOException{
         System.out.println("========================");
@@ -38,14 +39,22 @@ public class BoardReviewRestController {
     }
 
 
-    //돌봄 서비스 후기 리스트(검색포함)
+    /**
+     * 돌봄 서비스 후기 목록
+     * @param page page 변수
+     * @param searchReviewVo 검색 정보를 담고 있는 vo
+     * @return
+     */
     @GetMapping("/service/{page}")
     public Map<String, Object> findListAll(@PathVariable("page") int page, SearchReviewVo searchReviewVo){
 
+        //페이징
         Criteria criteria = new Criteria();
         criteria.setPage(page);
         //한 페이지당 게시물 수 설정
         criteria.setAmount(8);
+
+
         PageVo pageReviewVo = new PageVo(reviewService.getTotal(searchReviewVo), criteria);
         List<SitterBoardVo> serviceReviewList = reviewService.selectAll(criteria, searchReviewVo);
 
@@ -64,13 +73,12 @@ public class BoardReviewRestController {
 
 
     //====================================================================
-
-
+    
     //이벤트 서비스 후기 사진 저장경로
     @Value("${file.dir}")
     String fileEventImg;
 
-    //이벤트 서비스 후기 사진(검색포함)
+    //이벤트 서비스 후기 사진
     @GetMapping("/img")
     public byte[] getImg(String fileFullName) throws IOException{
         System.out.println("============================================================");
@@ -79,11 +87,16 @@ public class BoardReviewRestController {
     }
 
 
-    //이벤트 서비스 후기 리스트
+    /**
+     * 이벤트 서비스 후기 목록
+     * @param page page 변수
+     * @param searchReviewVo 검색 정보를 담고있는 vo
+     * @return
+     */
     @GetMapping("/eventReview/{page}")
     public Map<String, Object> findEventReviewList(@PathVariable("page") int page,
                                                    SearchReviewVo searchReviewVo){
-
+        //페이징
         Criteria criteria = new Criteria();
         criteria.setPage(page);
         criteria.setAmount(8);

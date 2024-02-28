@@ -21,16 +21,23 @@ public class IndexController {
 
 
     private final ReviewService reviewService;
-    
-    //메인페이지
+
+    /**
+     * 메인페이지 컨트롤러
+     * @param model model 객체
+     * @return
+     */
     @GetMapping("/index")
     public String showMainPage(Model model){
 
+
+
+        //돌봄 베스트 후기
         List<SitterBoardVo> sitterBoardVo = reviewService.findTopCount();
-        List<EventBoardVo> eventBoardVo = reviewService.findEventTopCount();
-
-
         model.addAttribute("reviewTop", sitterBoardVo);
+
+        //이벤트 베스트 후기
+        List<EventBoardVo> eventBoardVo = reviewService.findEventTopCount();
         model.addAttribute("eventReviewTop", eventBoardVo);
 
         log.info(sitterBoardVo.toString());

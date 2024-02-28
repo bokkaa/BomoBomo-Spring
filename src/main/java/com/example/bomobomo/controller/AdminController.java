@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.HtmlUtils;
 
-import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;

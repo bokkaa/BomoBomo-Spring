@@ -21,12 +21,22 @@ public class NoticeService {
 
 
 
-    //공지사항 리스트 및 검색 리스트
+
+    /**
+     * 공지사항 목록
+     * @param criteria 페이징 처리를 위한 criteria 객체
+     * @param searchVo 검색정보가 담긴 vo
+     * @return
+     */
     public List<NoticeDto> selectAll(Criteria criteria, SearchVo searchVo){
         return noticeMapper.selectAll(criteria, searchVo);
     }
 
-    //공지사항 상세보기
+    /**
+     * 공지사항 상세
+     * @param noticeNumber 공지사항 ID
+     * @return
+     */
     public NoticeDto selectOne(Long noticeNumber){
 
         if (noticeNumber == null) {
@@ -38,14 +48,21 @@ public class NoticeService {
     }
 
 
-    //공지사항 게시물 수(검색결과 포함)
+
+    /**
+     * 공지사항 게시물 총 개수
+     * @param searchVo 검색정보가 담긴 vo
+     * @return
+     */
     public int getTotal(SearchVo searchVo){
         return noticeMapper.getTotal(searchVo);
     }
 
 
-
-    //공지사항 조회수
+    /**
+     * 공지사항 조회수 증가
+     * @param noticeNumber 공지사항 ID
+     */
     public void updateCount(Long noticeNumber){
 
 

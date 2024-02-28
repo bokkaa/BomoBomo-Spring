@@ -26,6 +26,12 @@ public class BoardNoticeRestController {
     private final NoticeService noticeService;
 
 
+    /**
+     * 공지사항 목록
+     * @param page page 변수
+     * @param searchVo 검색 정보가 담긴 vo
+     * @return
+     */
     @GetMapping("/list/{page}")
     public Map<String, Object> findAll(@PathVariable("page")int page, SearchVo searchVo) {
 

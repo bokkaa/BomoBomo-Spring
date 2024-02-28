@@ -19,14 +19,21 @@ public class ReplyService {
     private final ReplyMapper replyMapper;
 
 
-    //돌봄서비스 리뷰 댓글
-    //댓글 입력
+    /**
+     * 돌봄 서비스 후기 - 댓글 등록
+     * @param sitterCommentDto 댓글 정보가 담긴 dto
+     */
     public void register(SitterCommentDto sitterCommentDto){
        replyMapper.insert(sitterCommentDto);
     }
 
 
-    //댓글 리스트 조회
+
+    /**
+     * 돌봄 서비스 후기 - 댓글 목록
+     * @param sitterBoardNumber 돌봄 서비스 후기 게시물 ID
+     * @return 해당 게시물 ID에 등록된 댓글 목록
+     */
     public List<SitterCommentVo> find(Long sitterBoardNumber){
         if (sitterBoardNumber == null) {
 
@@ -37,7 +44,13 @@ public class ReplyService {
     }
 
 
-    //댓글 리스트 조회(페이징 포함)
+
+    /**
+     * 돌봄 서비스 후기 - 댓글 목록
+     * @param sitterBoardNumber 돌봄 서비스 후기 게시물 ID
+     * @param criteria 페이징 처리를 위한 criteria 객체
+     * @return 해당 게시물 ID에 등록된 댓글 목록
+     */
     public List<SitterCommentVo> findAll(Long sitterBoardNumber, Criteria criteria) {
 
         if (sitterBoardNumber == null) {
@@ -47,13 +60,21 @@ public class ReplyService {
         return replyMapper.selectList(sitterBoardNumber, criteria);
     }
 
-    //댓글 수정
+
+    /**
+     * 돌봄 서비스 후기 - 댓글 수정
+     * @param sitterCommentDto 수정 정보가 담긴 dto
+     */
     public void modify(SitterCommentDto sitterCommentDto){
         replyMapper.update(sitterCommentDto);
 
     }
 
-    //댓글 삭제
+
+    /**
+     * 돌봄 서비스 후기 - 댓글 삭제
+     * @param sitterCommentNumber 댓글 ID
+     */
     public void remove(Long sitterCommentNumber){
         if (sitterCommentNumber == null) {
             throw new IllegalArgumentException("댓글 번호 누락");
@@ -63,7 +84,11 @@ public class ReplyService {
         replyMapper.delete(sitterCommentNumber);
     }
 
-    //댓글 개수 가져오기
+    /**
+     * 돌봄 서비스 후기 - 댓글 총개수
+     * @param sitterBoardNumber 돌봄 서비스 후기 게시물 ID
+     * @return
+     */
     public int getTotal(Long sitterBoardNumber){
         if (sitterBoardNumber == null) {
             throw new IllegalArgumentException("리뷰게시판 번호 누락");
@@ -74,13 +99,24 @@ public class ReplyService {
 
     //============================================
     //이벤트 서비스 리뷰 댓글
-    //댓글 등록
+
+
+    /**
+     * 이벤트 서비스 후기 - 댓글 등록
+     * @param eventCommentVo 댓글정보가 담긴 vo
+     */
     public void registerEventReply(EventCommentVo eventCommentVo){
         replyMapper.insertEventReply(eventCommentVo);
 
     }
 
-    //댓글 리스트조회(페이징 포함)
+
+    /**
+     * 이벤트 서비스 후기 - 댓글 목록
+     * @param eventBoardNumber 이벤트 후기 게시물 ID
+     * @param criteria 페이징 처리를 위한 criteria 객체
+     * @return
+     */
     public List<EventCommentVo> findAllEventReply(Long eventBoardNumber, Criteria criteria){
 
         if (eventBoardNumber == null) {
@@ -90,13 +126,21 @@ public class ReplyService {
         return replyMapper.selectListEventReply(eventBoardNumber, criteria);
     }
 
-    //댓글 수정
+
+    /**
+     * 이벤트 서비스 후기 - 댓글 수정
+     * @param eventCommentVo 수정 정보가 담긴 vo
+     */
     public void modifyEventReply(EventCommentVo eventCommentVo){
         replyMapper.updateEventReply(eventCommentVo);
     }
 
 
-    //댓글 삭제
+
+    /**
+     * 이벤트 서비스 후기 - 댓글 삭제
+     * @param eventCommentNumber 댓글 ID
+     */
     public void removeEventReply(Long eventCommentNumber){
         if (eventCommentNumber == null) {
             throw new IllegalArgumentException("이벤트 댓글 번호 누락");
@@ -105,7 +149,12 @@ public class ReplyService {
         replyMapper.deleteEventReply(eventCommentNumber);
     }
 
-    //댓글 개수 가져오기
+
+    /**
+     * 이벤트 서비스 후기 - 댓글 총개수
+     * @param eventBoardNumber 이벤트 후기 게시물 ID
+     * @return
+     */
     public int getTotalEventReply(Long eventBoardNumber){
         if (eventBoardNumber == null) {
             throw new IllegalArgumentException("이벤트 게시판 번호 누락");

@@ -22,14 +22,24 @@ public class BoardEventReplyRestController {
     private final ReplyService replyService;
 
     //이벤트 서비스 리뷰
-    //댓글등록
+
+
+    /**
+     * 이벤트 서비스 후기 - 댓글 등록
+     * @param eventCommentVo 이벤트 서비스 - 댓글 vo
+     */
     @PostMapping("")
     public void eventReviewReply(@RequestBody EventCommentVo eventCommentVo){
         replyService.registerEventReply(eventCommentVo);
     }
 
 
-    //이벤트 서비스 리뷰 댓글 리스트
+    /**
+     * 이벤트 서비스 후기- 댓글 리스트
+     * @param eventBoardNumber 이벤트 후기 게시글  ID
+     * @param page page 변수
+     * @return 해당 게시글 ID와 일치하는 이벤트 게시글에 등록된 댓글 리스트
+     */
     @GetMapping("/list/{eventBoardNumber}/{page}")
     public Map<String, Object> showEventReplyList(@PathVariable("eventBoardNumber") Long eventBoardNumber,
                                                   @PathVariable("page") int page){
@@ -52,7 +62,10 @@ public class BoardEventReplyRestController {
     }
 
 
-    //댓글 삭제
+    /**
+     * 이벤트 서비스 후기  - 댓글 삭제
+     * @param eventCommentNumber 이벤트 서비스 후기 댓글ID
+     */
     @DeleteMapping("/{eventCommentNumber}")
     public void removeReply(@PathVariable("eventCommentNumber") Long eventCommentNumber){
         if (eventCommentNumber == null) {
@@ -63,7 +76,11 @@ public class BoardEventReplyRestController {
     }
 
 
-    //댓글 수정
+    /**
+     * 이벤트 서비스 후기 - 댓글 수정
+     * @param eventCommentNumber 이벤트 후기 게시글 ID
+     * @param eventCommentVo 이벤트 후기 댓글 vo
+     */
     @PatchMapping("{eventCommentNumber}")
     public void modifyEventReply(@PathVariable("eventCommentNumber") Long eventCommentNumber,
                                  @RequestBody EventCommentVo eventCommentVo){

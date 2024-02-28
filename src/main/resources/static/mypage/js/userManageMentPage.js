@@ -94,7 +94,7 @@ function checkPassword() {
 $('.removebtn').on('click',function (){
     let userRemoveBtn=$(this).data('number');
     console.log(userRemoveBtn);
-    if(confirm("정말로 삭제하시겠습니까?")){
+    if(confirm("정말로 탈퇴하시겠습니까?")){
         console.log(userRemoveBtn);
         window.location.href='/mypage/userInfoDelete?userNumber=' + userRemoveBtn;
     }else{

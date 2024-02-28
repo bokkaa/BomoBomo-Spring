@@ -683,6 +683,7 @@ input[type="checkbox"]:checked {
     /* color: black; */
     background-color: #dcdfdfb8;
     z-index: 999;
+    margin: 0 1px;
 }
 .sitterPossible {
     width: 140px;

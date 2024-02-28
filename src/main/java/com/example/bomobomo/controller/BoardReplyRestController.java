@@ -20,23 +20,33 @@ public class BoardReplyRestController {
 
     private final ReplyService replyService;
 
-    //돌봄 서비스 리뷰
-    //댓글 등록
+    /**
+     * 돌봄 서비스 후기 - 댓글 등록
+     * @param sitterCommentDto 댓글 정보가 담긴 dto
+     */
     @PostMapping("")
     public void serviceReviewReply(@RequestBody SitterCommentDto sitterCommentDto){
         replyService.register(sitterCommentDto);
 
     }
-    
 
-    //댓글 리스트 조회
+
+    /**
+     * 돌봄 서비스 후기 - 댓글 목록 조회
+     * @param sitterBoardNumber 돌봄 후기 게시물 ID
+     * @return 해당 ID와 일치하는 돌봄 후기에 등록된 댓글 목록
+     */
     @GetMapping("/list/{sitterBoardNumber}")
     public List<SitterCommentVo> showReply(@PathVariable("sitterBoardNumber") Long sitterBoardNumber){
         return replyService.find(sitterBoardNumber);
     }
 
-    
-    //댓글리스트 조회(페이징 포함)
+    /**
+     * 돌봄 서비스 후기 - 댓글 목록 조회
+     * @param sitterBoardNumber 돌봄 후기 게시물 ID
+     * @param page page 변수
+     * @return 해당 ID와 일치하는 돌봄 후기에 등록된 댓글 목록
+     */
     @GetMapping("/list/{sitterBoardNumber}/{page}")
     public Map<String, Object> showReplyList(@PathVariable("sitterBoardNumber") Long sitterBoardNumber,
                                            @PathVariable("page") int page){
@@ -58,7 +68,11 @@ public class BoardReplyRestController {
     }
 
 
-    //댓글수정
+    /**
+     * 돌봄 서비스 후기 - 댓글 수정
+     * @param sitterCommentNumber 댓글 ID
+     * @param sitterCommentDto 수정 정보를 담고 있는 dto
+     */
     @PatchMapping("{sitterCommentNumber}")
     public void modifyReply(@PathVariable("sitterCommentNumber") Long sitterCommentNumber,
                             @RequestBody SitterCommentDto sitterCommentDto){
@@ -66,7 +80,10 @@ public class BoardReplyRestController {
         replyService.modify(sitterCommentDto);
     }
 
-    //댓글삭제
+    /**
+     * 돌봄 서비스 후기 - 댓글 삭제
+     * @param sitterCommentNumber 댓글 ID
+     */
     @DeleteMapping("/{sitterCommentNumber}")
     public void removeReply(@PathVariable("sitterCommentNumber") Long sitterCommentNumber){
         if (sitterCommentNumber == null) {

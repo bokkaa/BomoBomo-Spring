@@ -8,8 +8,6 @@
 <!--돌봄서비스 리뷰 리스트 불러오기(검색기능 및 페이징 처리포함)-->
     <select id="selectServiceReviewAll" resultType="sitterBoardVo">
 
-
-
         select rnum, SITTER_BOARD_NUMBER, user_number, user_id, EMP_NUMBER,SITTER_BOARD_CONTENT, SITTER_BOARD_REGISTER_DATE,
             SITTER_BOARD_MODIFY_DATE, RATING, SITTER_BOARD_COUNT, EMP_NAME, emp_img_UPLOAD_PATH, emp_img_UUID, emp_img_NAME
         from(
@@ -35,11 +33,9 @@
         )
         where rnum> (#{criteria.page}-1) * #{criteria.amount}
 
-
-
     </select>
 
-<!--    조회수 높은 게시물 6개 -->
+<!-- 돌봄 서비스 후기-  조회수 높은 게시물 6개 -->
     <select id="selectTopCount">
 
         select rnum, SITTER_BOARD_NUMBER, user_number, user_id, EMP_NUMBER,SITTER_BOARD_CONTENT, SITTER_BOARD_REGISTER_DATE,
@@ -60,8 +56,6 @@
                          order by SITTER_BOARD_COUNT desc
                      )
             )where rnum between 1 and 6
-
-
     </select>
 
 <!--    돌봄 서비스 리뷰 상세보기에 해당 시터 조회수 높은 리뷰들 불러오기-->
@@ -198,6 +192,7 @@
     </select>
 
 
+<!--    이벤트 서비스 후기 - 조회수 높은 게시물 6개-->
     <select id="selectTopEventCount">
         select rnum, event_BOARD_NUMBER, user_number, user_id, event_NUMBER, event_BOARD_CONTENT,
                event_BOARD_REGISTER_DATE,

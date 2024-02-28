@@ -67,7 +67,7 @@
 
                                 ) e3
                                 left join EVENT_BOARD eb on e3.EVENT_PAY_NUMBER = eb.EVENT_PAY_NUMBER
-                                ORDER BY event_board_register_date asc
+                                ORDER BY EVENT_PAY_NUMBER desc
                         )
                     <![CDATA[
                         where ROWNUM <= #{criteria.page} * #{criteria.amount}

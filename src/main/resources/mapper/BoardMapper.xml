@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.bomobomo.mapper.NoticeMapper">
+
+<!--    공지사항 목록 조회-->
     <select id="selectAll" resultType="noticeDto">
 
 
@@ -28,7 +30,7 @@
 
     </select>
 
-
+<!--공지사항 상세 -->
     <select id="selectOne" resultType="noticeDto">
 
 
@@ -40,7 +42,7 @@
 
 
 
-
+<!--공지사항 총 개수-->
     <select id="getTotal" resultType="_int">
 
         select count(notice_number)
@@ -54,7 +56,7 @@
     </select>
 
 
-
+<!--공지사항 조회수 증가-->
     <update id="updateCount" parameterType="Long">
 
         update notice set notice_count=notice_count+1 where notice_number = #{noticeNumber}
