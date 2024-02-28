@@ -48,7 +48,7 @@
 - 이벤트 후기 목록
 - 이벤트 후기 상세
 - 이벤트 후기 수정 삭제
-- 댓글 기
+- 댓글 기능
 #### 에러 페이지 <a href="https://github.com/bokkaa/SpringBoot-BomoBomo/wiki/%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80" >상세보기 - WIKI 이동</a>
 - 에러 페이지
 
