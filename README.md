@@ -59,7 +59,12 @@
 
 <details><summary>조회수( 쿠키값 이용 ) - 모듈화</summary>
 
+
+<img width="811" alt="제목 없음" src="https://github.com/bokkaa/SpringBoot-BomoBomo/assets/77730779/5398ee8d-b7ef-4207-b403-d47504ea8fd9">
+
+
 ```java
+
 //돌봄후기 상세보기
     @GetMapping("/reviewDetail")
     public String showServiceReviewDetailPage(@RequestParam("sitterBoardNumber") Long sitterBoardNumber,
@@ -128,12 +133,13 @@
 
 ```
 - 기존에는 모듈화 없이 컨트롤러에 직접 쿠키값을 이용하여 게시글 상세 페이지에 진입했을 시 24시간마다 한 번 조회수 1이 올라가도록 설정해놓았다.
+- 작동 원리는 게시물 상세 페이지에 진입할 때마다 그 게시물의 ID값을 쿠키값으로 이어붙이는 형식으로 해당 쿠키값에 게시물ID가 존재한다면 조회수가 올라가지 않는다.
 - 문제는 게시물 상세 페이지로 진입하는 매핑이 3-4개는 되었고 이 코드를 그대로 각각의 매핑 컨트롤러에 반복적으로 사용하기에는 가독성은 물론 유지보수에도 안 좋을듯하여 모듈화를 시도해보았다.
 
 
 <details><summary>수정코드</summary>
 
----java
+```java
 
 //조회수 쿠키 메소드 모듈화
 public class CookieHandler {
@@ -248,7 +254,7 @@ public class CookieHandler {
         CookieHandler cookieHandler = new CookieHandler(noticeService, reviewService);
         cookieHandler.handleCookies(req, resp, eventBoardNumber, "eventReviewDetail_count_cookie");
 
-````
+```
 
 </details> 
 
