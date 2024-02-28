@@ -57,312 +57,200 @@
 
 ## 📌코드 수정 
 
-<details><summary>1. 무한 증식 DTO</summary>
+<details><summary>조회수( 쿠키값 이용 ) - 모듈화</summary>
 
-<img width="467" alt="제목 없음" src="https://github.com/bokkaa/JPA-DW/assets/77730779/8ebbaafe-7333-4178-8bde-49104b332e1c">
-
-- 조회 정보 로직을 주로 담당하는 관리자 페이지에서 조회용 DTO를 마구잡이로 만들다보니 .java 파일 자체가 너무 많아졌다.
-- 그래서 이걸 어떻게 하면 가독성도 좋고 유지보수를 쉽게 할 수 있을까 해서 생각해낸 것이 내부 클래스의 활용이었다.
-- 내부 클래스를 활용하니 관리자 페이지에서 상품 관련 DTO를 약 12개에서 4개로 줄일 수 있었다.
-
-
-<img width="352" alt="제목 없음1" src="https://github.com/bokkaa/JPA-DW/assets/77730779/43337bab-5c48-4db5-aab0-2af78ef683af">
-
-<details><summary>Goods/AdminGoods.java </summary>
- 
 ```java
-package com.example.dw.domain.dto.admin.goods;
-
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-@Data
-@NoArgsConstructor
-public class AdminGoods extends AdminGoodsStan {
+//돌봄후기 상세보기
+    @GetMapping("/reviewDetail")
+    public String showServiceReviewDetailPage(@RequestParam("sitterBoardNumber") Long sitterBoardNumber,
+                                               Model model, HttpServletRequest req, HttpServletResponse resp){
 
 
-    private Long goodsMainImgId;
-    private String goodsMainImgPath;
-    private String goodsMainImgUuid;
-    private String goodsMainImgName;
 
-    private Long goodsDetailImgId;
-    private String goodsDetailImgPath;
-    private String goodsDetailImgUuid;
-    private String goodsDetailImgName;
+        SitterBoardVo sitterBoardVo = reviewService.selectOne(sitterBoardNumber);
+        List<SitterBoardVo> sitterBoardVoList = reviewService.findReviewDetail(sitterBoardVo.getEmpNumber());
+        double getAvg = reviewService.getAvgRating(sitterBoardVo.getEmpNumber());
 
 
-    @QueryProjection
-    public AdminGoods(Long goodsId, String goodsName, String goodsCategory, Integer goodsQuantity, Integer goodsPrice, Integer goodsSaleCount, String goodsDetailContent, String goodsMate, String goodsCertify, LocalDateTime goodsRd, LocalDateTime goodsMd, Long goodsMainImgId, String goodsMainImgPath, String goodsMainImgUuid, String goodsMainImgName, Long goodsDetailImgId, String goodsDetailImgPath, String goodsDetailImgUuid, String goodsDetailImgName) {
-        super(goodsId, goodsName, goodsCategory, goodsQuantity, goodsPrice, goodsSaleCount, goodsDetailContent, goodsMate, goodsCertify, goodsRd, goodsMd);
-        this.goodsMainImgId = goodsMainImgId;
-        this.goodsMainImgPath = goodsMainImgPath;
-        this.goodsMainImgUuid = goodsMainImgUuid;
-        this.goodsMainImgName = goodsMainImgName;
-        this.goodsDetailImgId = goodsDetailImgId;
-        this.goodsDetailImgPath = goodsDetailImgPath;
-        this.goodsDetailImgUuid = goodsDetailImgUuid;
-        this.goodsDetailImgName = goodsDetailImgName;
+        //조회수 쿠키 이용
+        Cookie[] cookies = req.getCookies();
+        boolean updateCount = true;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("reviewDetail_count_cookie".equals(cookie.getName())) {
+                    String cookieValue = cookie.getValue();
+
+                    String[] values = cookieValue.split("/");
+                    log.info("%%%%%%%%%% {}", Arrays.toString(values));
+
+                    List<Long> valueList = Arrays.stream(values).mapToLong(Long::parseLong).boxed().collect(Collectors.toList());
+
+                    if(valueList.contains(sitterBoardNumber)){
+                        updateCount = false;
+                        break;
+                    }
+
+                    valueList.add(sitterBoardNumber);
+                    log.info("##############3 {}", valueList);
+
+                    String result = String.join("/", valueList.stream().map(ele -> ele+"").collect(Collectors.toList()));
+
+                    log.info("**************************** {}", result);
+                    cookie.setValue(result);
+                    resp.addCookie(cookie);
+                    updateCount = false;
+                    reviewService.updateCount(sitterBoardNumber);
+
+                }
+
+            }
+        }
+
+        if (updateCount) {
+            Cookie newCookie = new Cookie("reviewDetail_count_cookie", req.getParameter("sitterBoardNumber"));
+            newCookie.setMaxAge(24 * 60 * 60);
+            resp.addCookie(newCookie);
+
+            reviewService.updateCount(sitterBoardNumber);
+        }
+
+
+        model.addAttribute("sitterReviewList", sitterBoardVoList);
+        model.addAttribute("serviceReviewDetail", sitterBoardVo);
+        model.addAttribute("getAvg", (Math.round(getAvg*100) / 100.0));
+
+        log.info(String.valueOf(getAvg));
+        log.info(sitterBoardVo.toString());
+        log.info(sitterBoardVoList.toString());
+        return "board/serviceReviewDetail";
     }
 
+```
+- 기존에는 모듈화 없이 컨트롤러에 직접 쿠키값을 이용하여 게시글 상세 페이지에 진입했을 시 24시간마다 한 번 조회수 1이 올라가도록 설정해놓았다.
+- 문제는 게시물 상세 페이지로 진입하는 매핑이 3-4개는 되었고 이 코드를 그대로 각각의 매핑 컨트롤러에 반복적으로 사용하기에는 가독성은 물론 유지보수에도 안 좋을듯하여 모듈화를 시도해보았다.
 
 
+<details><summary>수정코드</summary>
 
-    //제품 메인 사진
-    @Data
-    @NoArgsConstructor
-    public static class AdminGoodsMainImg {
+---java
 
-        private Long goodsMainImgId;
-        private String goodsMainImgPath;
-        private String goodsMainImgUuid;
-        private String goodsMainImgName;
+//조회수 쿠키 메소드 모듈화
+public class CookieHandler {
+
+    private final NoticeService noticeService;
+    private final ReviewService reviewService;
 
 
-        public AdminGoodsMainImg(Long goodsMainImgId, String goodsMainImgPath, String goodsMainImgUuid, String goodsMainImgName) {
-            this.goodsMainImgId = goodsMainImgId;
-            this.goodsMainImgPath = goodsMainImgPath;
-            this.goodsMainImgUuid = goodsMainImgUuid;
-            this.goodsMainImgName = goodsMainImgName;
+    /**
+     * 쿠키 처리
+     * @param req HttpServletRequest 객체
+     * @param resp HttpServletResponse 객체
+     * @param number ID값
+     * @param name 쿠키 이름값
+     */
+    public void handleCookies(HttpServletRequest req, HttpServletResponse resp, Long number, String name) {
+        // 현재 요청에서 쿠키를 가져옵니다.
+        Cookie[] cookies = req.getCookies();
+        boolean updateCount = true;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                // 쿠키의 이름이 주어진 이름과 일치하는지 확인합니다.
+                if (name.equals(cookie.getName())) {
+                    // 이미 존재하는 쿠키를 처리합니다.
+                    handleExistingCookie(cookie, number, req, resp, name);
+                    updateCount = false;
+                    break;
+                }
+            }
+        }
+        if (updateCount) {
+            // 쿠키가 존재하지 않을 경우 새로운 쿠키를 생성하고 추가합니다.
+            createAndAddNewCookie(req, resp, number, name);
         }
     }
 
-    //제품 상세 사진
-    @Data
-    public static class AdminGoodsDetailImg {
-        private Long goodsDetailImgId;
-        private String goodsDetailImgPath;
-        private String goodsDetailImgUuid;
-        private String goodsDetailImgName;
+    
 
+    /**
+     * 이미 존재하는 쿠키를 처리하는 메서드
+     * @param cookie cookie 객체
+     * @param number ID값
+     * @param req HttpServletRequest 객체
+     * @param resp HttpServletResponse 객체
+     * @param name 쿠키 이름값
+     */
+    private  void handleExistingCookie(Cookie cookie, Long number, HttpServletRequest req, HttpServletResponse resp, String name) {
+        String cookieValue = cookie.getValue();
+        String[] values = cookieValue.split("/");
+        log.info("%%%%%%%%%% {}", Arrays.toString(values));
 
-        public AdminGoodsDetailImg(Long goodsDetailImgId, String goodsDetailImgPath, String goodsDetailImgUuid, String goodsDetailImgName) {
-            this.goodsDetailImgId = goodsDetailImgId;
-            this.goodsDetailImgPath = goodsDetailImgPath;
-            this.goodsDetailImgUuid = goodsDetailImgUuid;
-            this.goodsDetailImgName = goodsDetailImgName;
+        List<Long> valueList = Arrays.stream(values).map(Long::parseLong).collect(Collectors.toList());
+
+        // 번호가 이미 존재하면 메서드를 즉시 종료합니다.
+        if (valueList.contains(number)) {
+            return;
+        }
+
+        // 번호가 존재하지 않으면 요청한 사이트의 게시물 번호를 리스트에 추가합니다.
+        valueList.add(number);
+        log.info("############### {}", valueList);
+
+        // 리스트에 추가한 값들을 하나의 문자열로 결합합니다.
+        String result = String.join("/", valueList.stream().map(Object::toString).collect(Collectors.toList()));
+        log.info("**************************** {}", result);
+        cookie.setValue(result);
+        resp.addCookie(cookie);
+
+        // 쿠키 이름(name)에 따라 이벤트 리뷰 게시판, 돌봄 서비스 리뷰 게시판 또는 공지사항 게시판을 업데이트합니다.
+        if ("eventReviewDetail_count_cookie".equals(name)) {
+            reviewService.updateEventReviewCount(number);
+        } else if ("reviewDetail_count_cookie".equals(name)) {
+            reviewService.updateCount(number);
+        } else if ("notice_count_cookie".equals(name)) {
+            noticeService.updateCount(number);
         }
     }
 
 
-    //관리자 페이지 상품 리스트
-    @Data
-    public static class AdminGoodsList {
+    /**
+     * 새로운 쿠키를 생성하고 추가하는 메서드
+     * @param req HttpServletRequest 객체
+     * @param resp HttpServletResponse 객체
+     * @param number ID값
+     * @param name 쿠키 이름값
+     */
+    private  void createAndAddNewCookie(HttpServletRequest req, HttpServletResponse resp, Long number, String name) {
+        Cookie newCookie = new Cookie(name, String.valueOf(number));
+        newCookie.setMaxAge(24 * 60 * 60); // 쿠키의 최대 수명을 설정합니다 (24시간)
+        resp.addCookie(newCookie);
 
-        private Long goodsId;
-        private String goodsCategory;
-        private String goodsName;
-        private Integer goodsQuantity;
-        private Integer goodsSaleCount;
-        private Integer goodsPrice;
-
-        private LocalDateTime goodsRd;
-        private LocalDateTime goodsMd;
-
-        @QueryProjection
-        public AdminGoodsList(Long goodsId, String goodsCategory, String goodsName, Integer goodsQuantity, Integer goodsSaleCount, Integer goodsPrice, LocalDateTime goodsRd, LocalDateTime goodsMd) {
-            this.goodsId = goodsId;
-            this.goodsCategory = goodsCategory;
-            this.goodsName = goodsName;
-            this.goodsQuantity = goodsQuantity;
-            this.goodsSaleCount = goodsSaleCount;
-            this.goodsPrice = goodsPrice;
-            this.goodsRd = goodsRd;
-            this.goodsMd = goodsMd;
+        // 쿠키 이름(name)에 따라 이벤트 리뷰 게시판, 돌봄 서비스 리뷰 게시판 또는 공지사항 게시판을 업데이트합니다.
+        if ("eventReviewDetail_count_cookie".equals(name)) {
+            reviewService.updateEventReviewCount(number);
+        } else if ("reviewDetail_count_cookie".equals(name)) {
+            reviewService.updateCount(number);
+        } else if ("notice_count_cookie".equals(name)) {
+            noticeService.updateCount(number);
         }
     }
-
-
-    //관리자 페이지 상품 상세보기
-    @Data
-    public static class AdminGoodsDetail extends AdminGoodsStan {
-
-        private Double ratingAvg;
-
-        private String goodsMainImgPath;
-        private String goodsMainImgUuid;
-        private String goodsMainImgName;
-        private List<AdminGoods.AdminGoodsDetailImg> adminGoodsDetailImg;
-
-        public AdminGoodsDetail(Long goodsId, String goodsName, String goodsCategory, Integer goodsQuantity, Integer goodsPrice, Integer goodsSaleCount, String goodsDetailContent, String goodsMate, String goodsCertify, LocalDateTime goodsRd, LocalDateTime goodsMd, Double ratingAvg, String goodsMainImgPath, String goodsMainImgUuid, String goodsMainImgName) {
-            super(goodsId, goodsName, goodsCategory, goodsQuantity, goodsPrice, goodsSaleCount, goodsDetailContent, goodsMate, goodsCertify, goodsRd, goodsMd);
-            this.ratingAvg = ratingAvg;
-            this.goodsMainImgPath = goodsMainImgPath;
-            this.goodsMainImgUuid = goodsMainImgUuid;
-            this.goodsMainImgName = goodsMainImgName;
-        }
-
-        public AdminGoodsDetail setGoodsDetailImg(List<AdminGoods.AdminGoodsDetailImg> adminGoodsDetailImg) {
-            this.adminGoodsDetailImg = adminGoodsDetailImg;
-            return this;
-        }
-
-    }
-
-
 }
 
-```
-  
-</details>
-</details>
+.
+.
+.
 
-<br>
+// 결과적으로 각각의 매핑 컨트롤러에는 
+// 다음과 같은 코드만 추가하면 같은 기능을 구현할 수 있게 되었다.
 
-<details><summary>2. 페이징 처리 기준</summary>
+       //조회수 증가
+        CookieHandler cookieHandler = new CookieHandler(noticeService, reviewService);
+        cookieHandler.handleCookies(req, resp, eventBoardNumber, "eventReviewDetail_count_cookie");
 
-```java
+````
 
-@Override
-    public Page<AdminOrderListResultDto> orderList(Pageable pageable, AdminSearchOrderForm adminSearchOrderForm) {
-
-
-        SearchForm searchForm = new SearchForm(adminSearchOrderForm.getCate(), adminSearchOrderForm.getKeyword());
-
-        List<AdminOrderListDto> list = jpaQueryFactory.select(new QAdminOrderListDto(
-                orderList.id,
-                orders.id,
-                orders.users.id,
-                orders.users.userAccount,
-                orders.orderUserAddressNumber,
-                orders.orderAddressNormal,
-                orders.orderAddressDetail,
-                orders.orderUserEmail,
-                orders.orderUserName,
-                orders.orderUserPhoneNumber,
-                orders.orderRegisterDate,
-                goods.id,
-                goods.goodsName,
-                orderItem.orderPrice,
-                orderItem.orderQuantity,
-                orderList.orderDate
-        ))
-                .from(orderList)
-                .leftJoin(orderList.orders, orders)
-                .leftJoin(orders.users, users)
-                .leftJoin(orders.orderItems, orderItem)
-                .leftJoin(orderItem.goods, goods)
-                .where(
-                        cateKeywordEq(searchForm),
-                        dateEq(adminSearchOrderForm.getPrev(), adminSearchOrderForm.getNext())
-
-                )
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
-                .fetch();
-
-        Long getTotal = jpaQueryFactory.select(
-                orderList.count()
-        )
-                .from(orderList)
-                .where(
-                        cateKeywordEq(searchForm),
-                        dateEq(adminSearchOrderForm.getPrev(), adminSearchOrderForm.getNext())
-
-                )
-                .fetchOne();
-
-
-        return new PageImpl<>(convertOrderList(list),pageable, getTotal);
-
-
-    }
-
-
-
-    // AdminOrderListDto 목록을 AdminOrderListResultDto로 변환하는 메서드
-    private List<AdminOrderListResultDto> convertOrderList(List<AdminOrderListDto> orderList) {
-
-       ....
-    }
-
-
-```
-
-- 한 페이지당 보이는 게시글을 15개로 고정해놓았다. 하지만 위 방식으로 쿼리를 돌려서 뽑아보니 <br>
-  주문 목록 id 기준으로 페이징처리가 되는 것이 아니라 주문 내역에 들어가 있는 상품들 수로 페이징 기준이 잡혀버렸다.
-- 따라서 이를 해결하기 위해 주문ID 조회를 루트로 하는 쿼리를 따로 뽑았고 그 결과값을 본 쿼리의 where in절에 조건으로 넣었다.
-
-<details><summary>수정 코드
-</summary>
-
-```java
-
- @Override
-    public Page<AdminOrderList.AdminOrdersListDto.AdminOrderListResultDto> orderLists(
-            Pageable pageable, AdminSearchOrderForm adminSearchOrderForm) {
-
-        SearchForm searchForm = new SearchForm(adminSearchOrderForm.getCate(), adminSearchOrderForm.getKeyword());
-
-        //orderListId로 페이징처리하기 위한 루트쿼리
-        List<Long> orderListIds = jpaQueryFactory
-                .selectDistinct(orderList.id)
-                .from(orderList)
-                .where(
-                        cateKeywordEq(searchForm),
-                        dateEq(adminSearchOrderForm.getPrev(), adminSearchOrderForm.getNext())
-                )
-
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
-                .fetch();
-
-        System.out.println(orderListIds);
-
-        List<AdminOrderList.AdminOrdersListDto> list = jpaQueryFactory.select(new QAdminOrderList_AdminOrdersListDto(
-                orderList.id,
-                orders.id,
-                users.id,
-                users.userAccount,
-                orders.orderUserAddressNumber,
-                orders.orderAddressNormal,
-                orders.orderAddressDetails,
-                orders.orderUserEmail,
-                orders.orderUserName,
-                orders.orderUserPhoneNumber,
-                orders.orderRegisterDate,
-                goods.id,
-                goods.goodsName,
-                orderItem.orderPrice,
-                orderItem.orderQuantity,
-                orders.orderRegisterDate
-        ))
-                .from(orderList)
-                .leftJoin(orderList.orders, orders)
-                .leftJoin(orders.users, users)
-                .leftJoin(orders.orderItems, orderItem)
-                .leftJoin(orderItem.goods, goods)
-                .where(orderList.id.in(orderListIds))
-                .fetch();
-
-        Long getTotal = jpaQueryFactory.select(
-                orderList.count()
-        )
-                .from(orderList)
-                .where(
-                        cateKeywordEq(searchForm),
-                        dateEq(adminSearchOrderForm.getPrev(), adminSearchOrderForm.getNext())
-                )
-                .fetchOne();
-
-        return new PageImpl<>(convertOrderList(list), pageable, getTotal);
-    }
-
- private List<AdminOrderList.AdminOrdersListDto.AdminOrderListResultDto> convertOrderList(
-            List<AdminOrderList.AdminOrdersListDto> orderList) {
-
-...
-}
-
-```
-
-
-
-</details>
+</details> 
 
 </details>
 
